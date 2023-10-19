@@ -16,8 +16,8 @@
   <div class="login-form">
     <form #loginForm="ngForm" novalidate>
       <ion-input
-        label="Username"
-        labelPlacement="stacked"appicon.svg
+        label="Nom d'utilisateur"
+        labelPlacement="stacked"
         fill="solid"
         [(ngModel)]="login.username"
         name="username"
@@ -25,20 +25,20 @@
         #username="ngModel"
         spellcheck="false"
         autocapitalize="off"
-        errorText="Username is required"
-        required>
+        errorText="Le nom d'utilisateur est obligatoire"
+        required="required">
       </ion-input>
 
       <ion-input
-        label="Password"
+        label="Mot de passe"
         labelPlacement="stacked"
         fill="solid"
         [(ngModel)]="login.password"
         name="password"
         type="password"
         #password="ngModel"
-        errorText="Password is required"
-        required>
+        errorText="Le mot de passe est obligatoire"
+        required="required">
       </ion-input>
 
       <ion-row>
