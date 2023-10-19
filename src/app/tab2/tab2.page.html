@@ -1,17 +1,61 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Nouvelle alerte</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <form #alertForm="ngForm" novalidate>
+    <ion-item>
+      <ion-label position="stacked">Nom</ion-label>
+      <ion-input [(ngModel)]="alert.nom" name="nom" type="text" required></ion-input>
+    </ion-item>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+    <ion-item>
+      <ion-label position="stacked">Prénom</ion-label>
+      <ion-input [(ngModel)]="alert.prenom" name="prenom" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">NIP</ion-label>
+      <ion-input [(ngModel)]="alert.nip" name="nip" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Ville</ion-label>
+      <ion-select [(ngModel)]="alert.ville" name="ville">
+        <ion-select-option value="ouaga">Ouaga</ion-select-option>
+        <ion-select-option value="bob">Bobo</ion-select-option>
+        <ion-select-option value="bagassi">Bagassi</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Arrondissement</ion-label>
+      <ion-select [(ngModel)]="alert.arrondissement" name="arrondissement">
+        <ion-select-option value="arrondissement1">Arrondissement 1</ion-select-option>
+        <ion-select-option value="arrondissement2">Arrondissement 2</ion-select-option>
+        <ion-select-option value="arrondissement3">Arrondissement 3</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Secteur</ion-label>
+      <ion-select [(ngModel)]="alert.secteur" name="secteur">
+        <ion-select-option value="secteur1">Secteur 1</ion-select-option>
+        <ion-select-option value="secteur2">Secteur 2</ion-select-option>
+        <ion-select-option value="secteur3">Secteur 3</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Commentaire</ion-label>
+      <ion-textarea [(ngModel)]="alert.commentaire" name="commentaire" required></ion-textarea>
+    </ion-item>
+
+    <ion-button (click)="onSubmit(alertForm)" expand="full">Envoyer</ion-button>
+  </form>
 </ion-content>
