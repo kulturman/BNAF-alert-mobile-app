@@ -17,17 +17,17 @@ export class AppComponent {
   appPages = [
     {
       title: 'Accueil',
-      url: '/tabs/tab1',
+      url: '/home',
       icon: 'home'
     },
     {
       title: 'Nouvelle alerte',
-      url: '/tabs/tab2',
+      url: '/new-alert',
       icon: 'send'
     },
     {
       title: 'Votre historique',
-      url: '/app/tabs/bnaf',
+      url: '/history',
       icon: 'folder'
     }
   ];
@@ -37,5 +37,4 @@ export class AppComponent {
   logout() {
 
   }
-  constructor() {}
 }

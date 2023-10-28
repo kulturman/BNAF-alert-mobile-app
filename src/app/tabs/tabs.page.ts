@@ -9,7 +9,4 @@ import { IonicModule } from '@ionic/angular';
   imports: [IonicModule],
 })
 export class TabsPage {
-  public environmentInjector = inject(EnvironmentInjector);
-
-  constructor() {}
 }
