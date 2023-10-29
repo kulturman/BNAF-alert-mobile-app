@@ -24,3 +24,11 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+.hidden {
+  display: none;
+}
+
+.input-wrapper {
+  gap: 20px !important;
+}

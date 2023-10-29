@@ -12,8 +12,6 @@ import {FormsModule} from "@angular/forms";
   imports: [IonicModule, CommonModule, RouterLink, FormsModule],
 })
 export class AppComponent {
-  public environmentInjector = inject(EnvironmentInjector);
-
   appPages = [
     {
       title: 'Accueil',

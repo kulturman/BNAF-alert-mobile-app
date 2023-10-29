@@ -20,59 +20,77 @@
       </ul>
     </ion-card-content>
   </ion-card>
-  <form #alertForm="ngForm" novalidate>
+
+  <form [formGroup]="formGroup" novalidate>
+    <ion-item>
+      <ion-label position="stacked">Code de votre contact à la BNAF</ion-label>
+      <ion-input formControlName="agent_code" name="agent_code" type="text"></ion-input>
+    </ion-item>
+
     <ion-item>
       <ion-label position="stacked">Région</ion-label>
-      <ion-select [(ngModel)]="alert.ville" name="ville">
-        <ion-select-option value="ouaga">Ouaga</ion-select-option>
-        <ion-select-option value="bob">Bobo</ion-select-option>
-        <ion-select-option value="bagassi">Bagassi</ion-select-option>
+      <ion-select formControlName="region" name="region">
+        <ion-select-option value=""></ion-select-option>
+        <ion-select-option
+          *ngFor="let region of regions | keyvalue"
+          [value]="region.key"
+        >
+          {{region.key}}
+        </ion-select-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Province</ion-label>
-      <ion-select [(ngModel)]="alert.arrondissement" name="arrondissement">
-        <ion-select-option value="arrondissement1">Arrondissement 1</ion-select-option>
-        <ion-select-option value="arrondissement2">Arrondissement 2</ion-select-option>
-        <ion-select-option value="arrondissement3">Arrondissement 3</ion-select-option>
+      <ion-select formControlName="province" name="province">
+        <ion-select-option value=""></ion-select-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Commune</ion-label>
-      <ion-select [(ngModel)]="alert.secteur" name="secteur">
-        <ion-select-option value="secteur1">Secteur 1</ion-select-option>
-        <ion-select-option value="secteur2">Secteur 2</ion-select-option>
-        <ion-select-option value="secteur3">Secteur 3</ion-select-option>
+      <ion-select formControlName="commune" name="commune">
+        <ion-select-option value=""></ion-select-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Village</ion-label>
-      <ion-input [(ngModel)]="alert.nom" name="nom" type="text" required="required"></ion-input>
+      <ion-label position="stacked">Secteur / quartier</ion-label>
+      <ion-input formControlName="localite" name="localite" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Surnom / nom de la struture en cause</ion-label>
-      <ion-input [(ngModel)]="alert.nom" name="nom" type="text" required="required"></ion-input>
+      <ion-input formControlName="structure" name="structure" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Point de repère</ion-label>
-      <ion-input [(ngModel)]="alert.nom" name="nom" type="text" required="required"></ion-input>
+      <ion-input formControlName="repere" name="repere" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Numéro NIP de la CNIB (17 chiffres)</ion-label>
-      <ion-input [(ngModel)]="alert.nip" name="nip" type="text" required="required"></ion-input>
+      <ion-input formControlName="nip" name="nip" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item class="record-block">
+      <ion-icon (click)="deleteRecord()" [ngClass]="{'hidden': !isRecording && recordedData === null}" class="record-button" name="trash-outline"></ion-icon>
+      <ion-icon [ngClass]="{'hidden': isRecording || recordedData !== null}" (click)="startRecording()" class="record-button" name="caret-forward-circle-outline" size="large"></ion-icon>
+      <p [ngClass]="{'hidden': !isRecording}">{{displayTime()}}</p>
+      <audio *ngIf="recordedData !== null" controls [src]="getAudio()"></audio>
+      <ion-icon [ngClass]="{'hidden': !isRecording}" (click)="stopRecording()" class="record-button" name="send-outline" size="large"></ion-icon>
+    </ion-item>
+
+    <ion-item>
+      <ion-button (click)="takePicture()">Prendre une photo</ion-button>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Commentaire</ion-label>
-      <ion-textarea [(ngModel)]="alert.commentaire" name="commentaire" required></ion-textarea>
+      <ion-textarea formControlName="message" name="message"></ion-textarea>
     </ion-item>
 
-    <ion-button (click)="onSubmit(alertForm)" expand="full">Envoyer</ion-button>
+    <ion-button (click)="onSubmit()" expand="full">Envoyer</ion-button>
   </form>
 </ion-content>

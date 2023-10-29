@@ -19,10 +19,9 @@
         label="Nom d'utilisateur"
         labelPlacement="stacked"
         fill="solid"
-        [(ngModel)]="login.username"
+        [ngModel]="login.username"
         name="username"
         type="text"
-        #username="ngModel"
         spellcheck="false"
         autocapitalize="off"
         errorText="Le nom d'utilisateur est obligatoire"
@@ -33,17 +32,16 @@
         label="Mot de passe"
         labelPlacement="stacked"
         fill="solid"
-        [(ngModel)]="login.password"
+        [ngModel]="login.password"
         name="password"
         type="password"
-        #password="ngModel"
         errorText="Le mot de passe est obligatoire"
         required="required">
       </ion-input>
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="onLogin(loginForm)" type="submit" expand="block">Se connecter</ion-button>
+          <ion-button [disabled]="loginForm.invalid" (click)="onLogin(loginForm)" type="submit" expand="block">Se connecter</ion-button>
         </ion-col>
       </ion-row>
     </form>
