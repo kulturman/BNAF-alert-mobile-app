@@ -29,7 +29,11 @@
 
     <ion-item>
       <ion-label position="stacked">Région</ion-label>
-      <ion-select formControlName="region" name="region">
+      <ion-select
+        formControlName="region"
+        name="region"
+        (ionChange)="handleRegionChange($event)"
+      >
         <ion-select-option value=""></ion-select-option>
         <ion-select-option
           *ngFor="let region of regions | keyvalue"
@@ -42,8 +46,18 @@
 
     <ion-item>
       <ion-label position="stacked">Province</ion-label>
-      <ion-select formControlName="province" name="province">
+      <ion-select
+        formControlName="province"
+        name="province"
+        (ionChange)="handleProvinceChange($event)"
+      >
         <ion-select-option value=""></ion-select-option>
+        <ion-select-option
+          *ngFor="let province of provinces"
+          [value]="province"
+        >
+          {{province}}
+        </ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -51,6 +65,12 @@
       <ion-label position="stacked">Commune</ion-label>
       <ion-select formControlName="commune" name="commune">
         <ion-select-option value=""></ion-select-option>
+        <ion-select-option
+          *ngFor="let commune of communes"
+          [value]="commune"
+        >
+          {{commune}}
+        </ion-select-option>
       </ion-select>
     </ion-item>
 

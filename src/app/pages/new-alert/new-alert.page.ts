@@ -18,6 +18,8 @@ import {Camera, CameraResultType} from "@capacitor/camera";
 export class NewAlertPage implements OnInit {
   formGroup: FormGroup;
   regions: any;
+  provinces = [];
+  communes = [];
   isRecording: boolean = false;
   recordTime: number = 0;
   timerReference: any = 0;
@@ -118,4 +120,13 @@ export class NewAlertPage implements OnInit {
 
     this.selectedImageUrl = image.webPath;
   };
+
+  handleRegionChange(e: any) {
+    this.provinces = this.countryDataService.getProvincesByRegion(e.detail.value as string);
+    this.handleProvinceChange(e);
+  }
+
+  handleProvinceChange(e: any) {
+    this.communes = this.countryDataService.getCommunesByProvince(e.detail.value as string);
+  }
 }

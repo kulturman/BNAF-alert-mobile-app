@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CountryDataService {
-  regions = {
+  regions: any = {
     "BOUCLE DU MOUHOUN": [
       "BALE",
       "BANWA",
@@ -78,7 +78,7 @@ export class CountryDataService {
     ]
   };
 
-  provinces = {
+  provinces: any = {
     "BALE": "0101",
     "BANWA": "0102",
     "KOSSI": "0103",
@@ -126,7 +126,7 @@ export class CountryDataService {
     "PONI": "1304"
   }
 
-  communes = {
+  communes: any = {
     "0101": ["BAGASSI", "BANA", "BOROMO", "FARA", "OURY", "PA", "POMPOI", "POURA", "SIBY", "YAHO"],
     "0102": ["BALAVE", "KOUKA", "SAMI", "SANABA", "SOLENZO", "TANSILA"],
     "0103": ["BARANI", "BOMBOROKUY", "BOURASSO", "DJIBASSO", "DOKUY", "DOUMBALA", "KOMBORI", "MADOUBA", "NOUNA", "SONO"],
@@ -171,5 +171,14 @@ export class CountryDataService {
     "1302": ["DANO", "DISSIN", "GUEGUERE", "KOPER", "NIEGO", "ORONKUA", "OUESSA", "ZAMBO"],
     "1303": ["BATIE", "BOUSSOUKOULA", "KPUERE", "LEGMOIN", "MIDEBDO"],
     "1304": ["BOUROUM-BOUROUM", "BOUSSERA", "DJIGOUE", "GAOUA"]
+  }
+
+  getProvincesByRegion(region: string) {
+    return this.regions[region] || [];
+  }
+
+  getCommunesByProvince(province: string) {
+    let key = this.provinces[province];
+    return this.communes[key] || [];
   }
 }
