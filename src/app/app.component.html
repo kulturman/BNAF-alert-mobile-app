@@ -26,16 +26,16 @@
             <ion-item detail="false" routerDirection="root" routerLink="/account" routerLinkActive="active">
               <ion-icon name="person" slot="start"></ion-icon>
               <ion-label>
-                Mon compte
+                Vos alertes
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
 
           <ion-menu-toggle autoHide="false">
-            <ion-item (click)="logout()" button detail="false">
+            <ion-item (click)="logout()" detail="false" routerLink="">
               <ion-icon name="log-out" slot="start"></ion-icon>
               <ion-label>
-                Logout
+                Déconnexion
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
@@ -48,7 +48,7 @@
           </ion-list-header>
 
           <ion-menu-toggle autoHide="false">
-            <ion-item detail="false" routerDirection="root" routerLink="/login" routerLinkActive="active">
+            <ion-item detail="false" routerDirection="root" routerLink="/login">
               <ion-icon name="log-in" slot="start"></ion-icon>
               <ion-label>
                 Se connecter
@@ -57,7 +57,7 @@
           </ion-menu-toggle>
         </ion-list>
 
-        <ion-list *ngIf="!loggedIn" lines="none">
+        <ion-list lines="none">
           <ion-list-header>
             Préférences
           </ion-list-header>

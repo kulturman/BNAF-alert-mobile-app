@@ -1,9 +1,10 @@
-import { Component, EnvironmentInjector, inject } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import {RouterLink} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import {AuthService} from "./services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,7 @@ import {HttpClientModule} from "@angular/common/http";
     FormsModule
   ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   appPages = [
     {
       title: 'Accueil',
@@ -39,7 +40,15 @@ export class AppComponent {
   loggedIn = false;
   dark = false;
 
+  constructor(public authService: AuthService) {
+    this.authService.notification$.subscribe(isAuthenticated => this.loggedIn = isAuthenticated);
+  }
   logout() {
+    this.authService.logout();
+    this.loggedIn = false;
+  }
 
+  ngOnInit() {
+    this.loggedIn = this.authService.isAuthenticated();
   }
 }

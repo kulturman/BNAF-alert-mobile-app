@@ -30,6 +30,8 @@ export class LoginPage {
       email: form.value.username
     })
       .then(({data}) => {
+        this.authService.saveToken(data.token as string);
+        this.router.navigate(['/']);
       })
       .catch(async ({response}) => {
         const message = response?.data?.errors?.email[0] || 'Une erreur est survenue.';

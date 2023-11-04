@@ -1,14 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Historique alertes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content color="light">
-    <ion-list [inset]="true">
-      <ion-item *ngFor="let alert of alerts" (click)="navigateToDetails(alert)" ion-ripple-effect>
-        <ion-label>
-          <h2>Agent Code: {{ alert.agent_code }}</h2>
-          <p>Region: {{ alert.region }}</p>
-          <p>Province: {{ alert.province }}</p>
-          <p>Commune: {{ alert.commune }}</p>
-          <p>Localite: {{ alert.localite }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-  </ion-content>
-  
+  <ion-list [inset]="true">
+    <ion-item *ngFor="let alert of alerts" (click)="navigateToDetails(alert)" ion-ripple-effect>
+      <ion-label>
+        <h2>Agent Code: {{ alert.agent_code }}</h2>
+        <p>Region: {{ alert.region }}</p>
+        <p>Province: {{ alert.province }}</p>
+        <p>Commune: {{ alert.commune }}</p>
+        <p>Localite: {{ alert.localite }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
