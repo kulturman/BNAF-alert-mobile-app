@@ -17,6 +17,18 @@ export const routes: Routes = [
           import('../pages/new-alert/new-alert.page').then((m) => m.NewAlertPage),
       },
       {
+        path: 'history',
+        loadComponent: () =>
+          import('../pages/history/history.page').then((m) => m.HistoryPage),
+
+      },
+      {
+        path: 'details',
+        loadComponent: () =>
+        import('../pages/alert-details/alert-details.page').then((m) => m.AlertDetailsPage),
+
+      },
+      {
         path: '',
         redirectTo: '/home',
         pathMatch: 'full',
