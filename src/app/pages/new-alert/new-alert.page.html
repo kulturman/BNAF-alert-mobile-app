@@ -22,6 +22,8 @@
   </ion-card>
 
   <form [formGroup]="formGroup" novalidate>
+    <ion-loading #ionLoading trigger="open-loading" message="Veuillez patienter"></ion-loading>
+
     <ion-item>
       <ion-label position="stacked">Code de votre contact à la BNAF</ion-label>
       <ion-input formControlName="agent_code" name="agent_code" type="text"></ion-input>

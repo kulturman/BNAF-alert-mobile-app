@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {IonicModule} from '@ionic/angular';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {AlertController, IonicModule, IonLoading} from '@ionic/angular';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {CountryDataService} from "../../services/country-data.service";
@@ -7,6 +7,7 @@ import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {RecordingData, VoiceRecorder} from "capacitor-voice-recorder";
 import {DateUtil} from "../../shared/dateUtil";
 import {Camera, CameraResultType} from "@capacitor/camera";
+import {ReportService} from "../../services/report.service";
 
 @Component({
   selector: 'app-tab2',
@@ -25,12 +26,16 @@ export class NewAlertPage implements OnInit {
   timerReference: any = 0;
   recordedData: RecordingData | null = null;
   selectedImageUrl: string | undefined;
+  @ViewChild('ionLoading')
+  ionLoading!: IonLoading;
 
   constructor(
     public router: Router,
     private formBuilder: FormBuilder,
     private countryDataService: CountryDataService,
-    private dateUtil: DateUtil
+    private dateUtil: DateUtil,
+    private reportService: ReportService,
+    private alertController: AlertController
   ) {
     this.formGroup = formBuilder.group({
       region: [''],
@@ -50,7 +55,25 @@ export class NewAlertPage implements OnInit {
   }
 
   async onSubmit() {
-    console.log(this.formGroup.value)
+    await this.ionLoading.present();
+
+    this.reportService.newReport({
+      ...this.formGroup.value,
+      audio: this.recordedData?.value?.recordDataBase64
+    }).then(async ({data}) => {
+      const alert = await this.alertController.create({
+        header: 'Information',
+        message: data.message,
+        buttons: ['OK'],
+      });
+
+      this.formGroup.reset();
+      this.recordedData = null;
+      await alert.present();
+    })
+      .finally(() => {
+        this.ionLoading.dismiss();
+      });
   }
 
   async startRecording() {

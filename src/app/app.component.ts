@@ -3,13 +3,20 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import {RouterLink} from "@angular/router";
 import {FormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterLink, FormsModule],
+  imports: [
+    IonicModule,
+    CommonModule,
+    RouterLink,
+    HttpClientModule,
+    FormsModule
+  ],
 })
 export class AppComponent {
   appPages = [
