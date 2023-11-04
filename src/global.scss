@@ -32,3 +32,28 @@
 .input-wrapper {
   gap: 20px !important;
 }
+
+/* global.scss or your-component.scss */
+.error-alert {
+  --background: #fff; // Change as needed
+  --color: #d32f2f; // Some shade of red for errors
+  --border-radius: 8px;
+
+  .alert-wrapper {
+    border: 1px solid #d32f2f; // Red border for emphasis
+  }
+
+  .alert-head {
+    color: #d32f2f;
+  }
+
+  .alert-message {
+    font-weight: bold;
+  }
+
+  .alert-button-group {
+    button {
+      --color-hover: darken(#d32f2f, 10%); // Darken the hover color
+    }
+  }
+}

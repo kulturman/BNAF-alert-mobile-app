@@ -15,6 +15,7 @@
 
   <div class="login-form">
     <form #loginForm="ngForm" novalidate>
+      <ion-loading #ionLoading trigger="open-loading" message="Veuillez patienter"></ion-loading>
       <ion-input
         label="Nom d'utilisateur"
         labelPlacement="stacked"
