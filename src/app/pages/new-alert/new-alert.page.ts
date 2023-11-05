@@ -6,7 +6,7 @@ import {CountryDataService} from "../../services/country-data.service";
 import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {RecordingData, VoiceRecorder} from "capacitor-voice-recorder";
 import {DateUtil} from "../../shared/dateUtil";
-import {Camera, CameraResultType} from "@capacitor/camera";
+import {Camera, CameraResultType, CameraSource} from "@capacitor/camera";
 import {ReportService} from "../../services/report.service";
 
 @Component({
@@ -28,6 +28,7 @@ export class NewAlertPage implements OnInit {
   selectedImageUrl: string | undefined;
   @ViewChild('ionLoading')
   ionLoading!: IonLoading;
+  imageSource: any;
 
   constructor(
     public router: Router,
@@ -134,12 +135,25 @@ export class NewAlertPage implements OnInit {
     return new Blob(byteArrays, {type: contentType});
   }
 
+  // async takePicture() {
+  //   const image = await Camera.getPhoto({
+  //     quality: 90,
+  //     allowEditing: true,
+  //     resultType: CameraResultType.Uri
+  //   });
+
+  //   this.selectedImageUrl = image.webPath;
+  // };
+
   async takePicture() {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
-      resultType: CameraResultType.Uri
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Prompt
     });
+
+    this.imageSource = image.dataUrl;
 
     this.selectedImageUrl = image.webPath;
   };
