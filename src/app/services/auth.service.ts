@@ -20,6 +20,10 @@ export class AuthService {
     this.notify(true);
   }
 
+  getToken() {
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
   notify(value: boolean) {
     this.changeAuthStateSource.next(value);
   }

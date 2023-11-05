@@ -30,6 +30,7 @@ export class LoginPage {
       email: form.value.username
     })
       .then(({data}) => {
+        form.resetForm();
         this.authService.saveToken(data.token as string);
         this.router.navigate(['/']);
       })
