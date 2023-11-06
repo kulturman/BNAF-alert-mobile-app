@@ -1,0 +1,26 @@
+.report-item {
+  display: flex;
+  gap: 10%;
+  margin-bottom: 20px;
+}
+
+.report-item__label {
+  font-weight: bold;
+  font-size: 1rem;
+  color: white;
+  width: 30%;
+}
+
+.report-item__content {
+  width: 60%;
+  text-align: justify;
+}
+
+.report-item__photo {
+  display: flex;
+  gap: 20px;
+}
+
+.report-item__photo img {
+  width: 50px;
+}

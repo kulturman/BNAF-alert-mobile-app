@@ -11,10 +11,10 @@
 
 <ion-content color="light" *ngIf="alerts.length > 0;">
   <ion-list [inset]="true">
-    <ion-item *ngFor="let alert of alerts" ion-ripple-effect>
+    <ion-item *ngFor="let alert of alerts" (click)="navigateToDetails(alert)" ion-ripple-effect>
       <ion-label>
-        <h2>Agent Code: {{ alert.agent_code }}</h2>
-        <p>Region: {{ alert.region }}</p>
+        <h2>Code agent: {{ alert.agent_code }}</h2>
+        <p>Région: {{ alert.region }}</p>
         <p>Province: {{ alert.province }}</p>
         <p>Commune: {{ alert.commune }}</p>
         <p>Localite: {{ alert.localite }}</p>

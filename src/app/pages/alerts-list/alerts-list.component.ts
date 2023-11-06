@@ -3,6 +3,7 @@ import {InfiniteScrollCustomEvent, IonicModule, IonLoading} from "@ionic/angular
 import {NgForOf, NgIf} from "@angular/common";
 import {ReportModel} from "../../models/report.model";
 import {ReportService} from "../../services/report.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-alerts-list',
@@ -21,7 +22,10 @@ export class AlertsListComponent implements OnInit, AfterViewInit {
   @ViewChild('ionLoading')
   ionLoading!: IonLoading;
 
-  constructor(private reportService: ReportService) {
+  constructor(
+    private reportService: ReportService,
+    private router: Router
+  ) {
   }
 
   ngAfterViewInit() {
@@ -33,21 +37,19 @@ export class AlertsListComponent implements OnInit, AfterViewInit {
   }
 
   private fetchData(ev: any) {
-    setTimeout(() => {
-      this.reportService.getMyReports(this.page)
-        .then(({data}) => {
-          this.ionLoading.dismiss();
-          this.alerts = [...this.alerts, ...data.data];
+    this.reportService.getMyReports(this.page)
+      .then(({data}) => {
+        this.ionLoading.dismiss();
+        this.alerts = [...this.alerts, ...data.data];
 
-          if (data.data.length > 0) {
-            this.page++;
-          }
+        if (data.data.length > 0) {
+          this.page++;
+        }
 
-          if (ev) {
-            ev.target.complete();
-          }
-        });
-    }, 3000)
+        if (ev) {
+          ev.target.complete();
+        }
+      });
   }
 
   async onIonInfinite(ev: any) {
@@ -56,5 +58,11 @@ export class AlertsListComponent implements OnInit, AfterViewInit {
 
   private getNexPageData(ev: any) {
     this.fetchData(ev)
+  }
+
+  navigateToDetails(alert: ReportModel) {
+    this.router.navigate(['/details', alert.id], {
+      state: alert
+    });
   }
 }

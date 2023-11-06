@@ -60,7 +60,8 @@ export class NewAlertPage implements OnInit {
 
     this.reportService.newReport({
       ...this.formGroup.value,
-      audio: this.recordedData?.value?.recordDataBase64
+      audio: this.recordedData?.value?.recordDataBase64,
+      photoInput: this.imageSource || null
     }).then(async ({data}) => {
       const alert = await this.alertController.create({
         header: 'Information',
@@ -69,6 +70,7 @@ export class NewAlertPage implements OnInit {
       });
 
       this.formGroup.reset();
+      this.imageSource = undefined;
       this.recordedData = null;
       await alert.present();
     })
@@ -109,6 +111,7 @@ export class NewAlertPage implements OnInit {
   getAudio() {
     if (!this.recordedData) {
       return "";
+
     }
     const audioBlob = this.base64ToBlob(this.recordedData?.value?.recordDataBase64, 'audio/wav');
     return URL.createObjectURL(audioBlob);
@@ -134,16 +137,6 @@ export class NewAlertPage implements OnInit {
 
     return new Blob(byteArrays, {type: contentType});
   }
-
-  // async takePicture() {
-  //   const image = await Camera.getPhoto({
-  //     quality: 90,
-  //     allowEditing: true,
-  //     resultType: CameraResultType.Uri
-  //   });
-
-  //   this.selectedImageUrl = image.webPath;
-  // };
 
   async takePicture() {
     const image = await Camera.getPhoto({

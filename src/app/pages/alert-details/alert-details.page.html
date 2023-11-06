@@ -9,64 +9,64 @@
 
 <ion-content>
   <ion-card>
-    <ion-card-header>
-      {{ alert.region }}
-    </ion-card-header>
-
     <ion-card-content>
-      <ion-item>
-        <ion-label>Agent Code</ion-label>
-        <ion-note slot="end">{{ alert.agent_code }}</ion-note>
-      </ion-item>
+      <div class="report-item">
+        <span class="report-item__label">Code agent</span>
+        <span class="report-item__content" >{{alert.agent_code}}</span>
+      </div>
 
-      <ion-item>
-        <ion-label>Province</ion-label>
-        <ion-note slot="end">{{ alert.province }}</ion-note>
-      </ion-item>
+      <div class="report-item">
+        <span class="report-item__label">Région</span>
+        <span class="report-item__content" >{{alert.region}}</span>
+      </div>
 
-      <ion-item>
-        <ion-label>Commune</ion-label>
-        <ion-note slot="end">{{ alert.commune }}</ion-note>
-      </ion-item>
+      <div class="report-item">
+        <span class="report-item__label">Date</span>
+        <span class="report-item__content" >{{alert.created_at}}</span>
+      </div>
 
-      <ion-item>
-        <ion-label>Localite</ion-label>
-        <ion-note slot="end">{{ alert.localite }}</ion-note>
-      </ion-item>
+      <div class="report-item">
+        <span class="report-item__label">Province</span>
+        <span class="report-item__content" >{{alert.province}}</span>
+      </div>
 
-      <ion-item>
-        <ion-label>Structure</ion-label>
-        <ion-note slot="end">{{ alert.structure }}</ion-note>
-      </ion-item>
+      <div class="report-item">
+        <span class="report-item__label">Commune</span>
+        <span class="report-item__content" >{{alert.commune}}</span>
+      </div>
 
-      <ion-item>
-        <ion-label>Repere</ion-label>
-        <ion-note slot="end">{{ alert.repere }}</ion-note>
-      </ion-item>
+      <div class="report-item">
+        <span class="report-item__label">Localite</span>
+        <span class="report-item__content" >{{alert.localite}}</span>
+      </div>
 
-      <ion-item>
-        <ion-label>NIP</ion-label>
-        <ion-note slot="end">{{ alert.nip }}</ion-note>
-      </ion-item>
+      <div class="report-item">
+        <span class="report-item__label">Structure</span>
+        <span class="report-item__content" >{{alert.structure}}</span>
+      </div>
 
-      <ion-item>
-        <ion-label>Recorded Audio</ion-label>
-        <ion-note slot="end">
-          <a [href]="alert.recorded_audio">{{ alert.video }}</a>
-        </ion-note>
-      </ion-item>
+      <div class="report-item">
+        <span class="report-item__label">Point de repère</span>
+        <span class="report-item__content" >{{alert.repere}}</span>
+      </div>
 
-      <ion-item>
-        <ion-label>Image URL</ion-label>
-        <ion-note slot="end">
-          <a [href]="alert.image_url">{{ alert.image_url }}</a>
-        </ion-note>
-      </ion-item>
+      <div class="report-item">
+        <span class="report-item__label">NIP</span>
+        <span class="report-item__content" >{{alert.nip}}</span>
+      </div>
 
-      <ion-item>
-        <ion-label>Comment</ion-label>
-        <ion-note slot="end">{{ alert.comment }}</ion-note>
-      </ion-item>
+      <div class="report-item">
+        <span class="report-item__label">Commentaire</span>
+        <span class="report-item__content" [innerHTML]="alert.text"></span>
+      </div>
+
+      <div class="report-item" *ngIf="alert?.images?.length >= 0">
+        <span class="report-item__label">Images</span>
+        <span class="report-item__content report-item__photo">
+          <img (click)="displayImage(image)" [src]="image" alt="Image" *ngFor="let image of alert.photos">
+        </span>
+      </div>
+      <audio *ngIf="audio !== null && audio !== undefined" controls [src]="getAudio()"></audio>
     </ion-card-content>
   </ion-card>
 </ion-content>

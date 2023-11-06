@@ -6,8 +6,8 @@ import {AuthService} from "./auth.service";
   providedIn: 'root',
 })
 export class ReportService {
-  constructor(private authService: AuthService) {
-  }
+  constructor(private authService: AuthService) {}
+
   newReport(data: any)  {
     return axios.post('/api/reports', data);
   }
@@ -18,5 +18,9 @@ export class ReportService {
         Authorization: `Bearer ${this.authService.getToken()}`
       }
     });
+  }
+
+  getAudio(reportId: number) {
+    return axios.get(`/api/reports/${reportId}/getAudio`);
   }
 }
