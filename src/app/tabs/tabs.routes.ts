@@ -23,11 +23,6 @@ export const routes: Routes = [
 
       },
       {
-        path: 'my-alerts',
-        loadComponent: () =>
-          import('../pages/alerts-list/alerts-list.component').then((m) => m.AlertsListComponent),
-      },
-      {
         path: 'alerts',
         loadComponent: () =>
           import('../pages/alerts-list/alerts-list.component').then((m) => m.AlertsListComponent),

@@ -12,8 +12,10 @@ export class ReportService {
     return axios.post('/api/reports', data);
   }
 
-  getMyReports(page = 1) {
-    return axios.get(`/api/reports/me?page=${page}`, {
+  getReports(page = 1, all: boolean) {
+    const routeParam = all ? '' : '/me';
+
+    return axios.get(`/api/reports${routeParam}?page=${page}`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`
       }

@@ -3,7 +3,7 @@ import {InfiniteScrollCustomEvent, IonicModule, IonLoading} from "@ionic/angular
 import {NgForOf, NgIf} from "@angular/common";
 import {ReportModel} from "../../models/report.model";
 import {ReportService} from "../../services/report.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-alerts-list',
@@ -21,23 +21,31 @@ export class AlertsListComponent implements OnInit, AfterViewInit {
   alerts: ReportModel[] = [];
   @ViewChild('ionLoading')
   ionLoading!: IonLoading;
+  pageType!: string;
 
   constructor(
     private reportService: ReportService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
   }
 
   ngAfterViewInit() {
-    this.ionLoading.present();
+    //this.ionLoading.present();
   }
 
   async ngOnInit() {
-    this.fetchData(undefined);
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.pageType = params['filter'];
+      this.page = 1;
+      this.alerts = [];
+      this.fetchData(undefined);
+    })
   }
 
   private fetchData(ev: any) {
-    this.reportService.getMyReports(this.page)
+    this.ionLoading.present();
+    this.reportService.getReports(this.page, this.pageType === 'all')
       .then(({data}) => {
         this.ionLoading.dismiss();
         this.alerts = [...this.alerts, ...data.data];
