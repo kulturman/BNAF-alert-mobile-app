@@ -25,11 +25,6 @@
     <ion-loading #ionLoading trigger="open-loading" message="Veuillez patienter"></ion-loading>
 
     <ion-item>
-      <ion-label position="stacked">Code de votre contact à la BNAF</ion-label>
-      <ion-input formControlName="agent_code" name="agent_code" type="text"></ion-input>
-    </ion-item>
-
-    <ion-item>
       <ion-label position="stacked">Région</ion-label>
       <ion-select
         formControlName="region"
@@ -93,7 +88,12 @@
 
     <ion-item>
       <ion-label position="stacked">Numéro NIP de la CNIB (17 chiffres)</ion-label>
-      <ion-input formControlName="nip" name="nip" type="text"></ion-input>
+      <ion-input
+        inputmode="numeric"
+        minlength="17"
+        maxlength="17"
+        pattern="\d*"
+        formControlName="nip" name="nip" type="text"></ion-input>
     </ion-item>
 
     <ion-item class="record-block">
@@ -112,6 +112,11 @@
     <ion-item>
       <ion-label position="stacked">Commentaire</ion-label>
       <ion-textarea formControlName="message" name="message"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Espace réservé, code si vous en avez</ion-label>
+      <ion-input formControlName="agent_code" name="agent_code" type="text"></ion-input>
     </ion-item>
 
     <ion-button (click)="onSubmit()" expand="full">Envoyer</ion-button>
