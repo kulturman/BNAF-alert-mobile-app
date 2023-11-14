@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import {AuthService} from "./auth.service";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root',
@@ -9,13 +10,13 @@ export class ReportService {
   constructor(private authService: AuthService) {}
 
   newReport(data: any)  {
-    return axios.post('/api/reports', data);
+    return axios.post(environment.apiBasePath + '/api/reports', data);
   }
 
-  getReports(page = 1, all: boolean) {
+  getReports(page: number, all: boolean) {
     const routeParam = all ? '' : '/me';
 
-    return axios.get(`/api/reports${routeParam}?page=${page}`, {
+    return axios.get(`${environment.apiBasePath}/api/reports${routeParam}?page=${page}`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`
       }
@@ -23,6 +24,6 @@ export class ReportService {
   }
 
   getAudio(reportId: number) {
-    return axios.get(`/api/reports/${reportId}/getAudio`);
+    return axios.get(`${environment.apiBasePath}/api/reports/${reportId}/getAudio`);
   }
 }

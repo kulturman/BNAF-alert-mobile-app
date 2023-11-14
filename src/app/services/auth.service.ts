@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import axios from "axios";
 import {Subject} from "rxjs";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   async login(data: any) {console.log(data);
-    return axios.post('/api/login', data);
+    return axios.post(environment.apiBasePath + '/api/login', data);
   }
 
   private readonly TOKEN_KEY = 'token';
