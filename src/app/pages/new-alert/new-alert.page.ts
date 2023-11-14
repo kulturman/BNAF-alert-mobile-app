@@ -9,6 +9,7 @@ import {DateUtil} from "../../shared/dateUtil";
 import {Camera, CameraResultType, CameraSource} from "@capacitor/camera";
 import {ReportService} from "../../services/report.service";
 import { Network } from '@capacitor/network';
+import {DbService} from "../../services/db.service";
 
 @Component({
   selector: 'app-tab2',
@@ -38,6 +39,7 @@ export class NewAlertPage implements OnInit {
     private dateUtil: DateUtil,
     private reportService: ReportService,
     private alertController: AlertController,
+    private dbService: DbService
   ) {
     this.formGroup = formBuilder.group({
       region: [''],
@@ -52,7 +54,7 @@ export class NewAlertPage implements OnInit {
     })
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.regions = this.countryDataService.regions;
   }
 
@@ -99,6 +101,7 @@ export class NewAlertPage implements OnInit {
         message: "Votre connexion semble interrompue. Vos données ont été enregistrées localement et seront automatiquement transmises dès que la connexion sera rétablie.",
         buttons: ['OK'],
       });
+      console.log(this.formGroup.value);
       await alert.present();
     }
   }

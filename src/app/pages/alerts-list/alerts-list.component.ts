@@ -26,7 +26,7 @@ export class AlertsListComponent implements OnInit {
   constructor(
     private reportService: ReportService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
   ) {
   }
 

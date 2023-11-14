@@ -7,9 +7,10 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { defineCustomElements as jeepSqlite} from 'jeep-sqlite/loader';
 
 defineCustomElements(window);
-
+jeepSqlite(window);
 
 if (environment.production) {
   enableProdMode();
