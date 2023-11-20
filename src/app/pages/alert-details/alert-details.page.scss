@@ -7,8 +7,14 @@
 .report-item__label {
   font-weight: bold;
   font-size: 1rem;
-  color: white;
   width: 30%;
+  color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  .report-item__label {
+    color: white;
+  }
 }
 
 .report-item__content {

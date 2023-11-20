@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiBasePath: 'http://alertebnaf.gov.bf'
+  apiBasePath: 'https://alertebnaf.gov.bf'
 };
 
 /*
