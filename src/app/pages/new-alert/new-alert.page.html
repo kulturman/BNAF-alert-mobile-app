@@ -21,6 +21,30 @@
     </ion-card-content>
   </ion-card>
 
+  <ion-card class="warning">
+    <ion-card-content>
+      <div>
+        Votre formulaire contient peu d'informations et sera probablement pris en compte
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="success">
+    <ion-card-content>
+      <div>
+        Votre formulaire a de grandes chances d'être pertinent
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="danger">
+    <ion-card-content>
+      <div>
+        Votre formulaire contient très peu d'informations et ne sera probablement pris en compte
+      </div>
+    </ion-card-content>
+  </ion-card>
+
   <form [formGroup]="formGroup" novalidate>
     <ion-loading #ionLoading trigger="open-loading" message="Veuillez patienter"></ion-loading>
 
