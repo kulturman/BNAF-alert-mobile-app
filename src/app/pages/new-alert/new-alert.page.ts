@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AlertController, IonicModule, IonLoading} from '@ionic/angular';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
@@ -19,6 +19,7 @@ import {DbService} from "../../services/db.service";
   imports: [IonicModule, FormsModule, ReactiveFormsModule, NgForOf, KeyValuePipe, NgClass, NgIf]
 })
 export class NewAlertPage implements OnInit {
+  @ViewChild('score') scoreInput?: ElementRef;
   formGroup: FormGroup;
   regions: any;
   provinces = [];
@@ -31,6 +32,20 @@ export class NewAlertPage implements OnInit {
   @ViewChild('ionLoading')
   ionLoading!: IonLoading;
   imageSource: any;
+
+  fieldWeights = {
+    'region': 1,
+    'province': 1,
+    'commune': 1,
+    'localite': 2,
+    'structure': 1,
+    'repere': 2,
+    'nip': 1,
+    'photo': 3,
+    'message': 3,
+    'recordingIndicator': 3,
+    'espace': 3
+  };
 
   constructor(
     public router: Router,
@@ -56,6 +71,7 @@ export class NewAlertPage implements OnInit {
 
   async ngOnInit() {
     this.regions = this.countryDataService.regions;
+    this.checkFormRelevance();
   }
 
   async onSubmit() {
@@ -141,6 +157,7 @@ export class NewAlertPage implements OnInit {
 
     }
     const audioBlob = this.base64ToBlob(this.recordedData?.value?.recordDataBase64, 'audio/wav');
+    this.checkFormRelevance()
     return URL.createObjectURL(audioBlob);
   }
 
@@ -174,17 +191,57 @@ export class NewAlertPage implements OnInit {
     });
 
     this.imageSource = image.dataUrl;
-
+    if (this.imageSource !== undefined) {
+      this.checkFormRelevance()
+    }
     this.selectedImageUrl = image.webPath;
+
   };
 
   handleRegionChange(e: any) {
     this.provinces = this.countryDataService.getProvincesByRegion(e.detail.value as string);
     this.handleProvinceChange(e);
+    this.checkFormRelevance();
   }
 
   handleProvinceChange(e: any) {
     this.communes = this.countryDataService.getCommunesByProvince(e.detail.value as string);
+    this.checkFormRelevance();
   }
 
+  checkFormRelevance() {
+    const formControls = Array.from(document.querySelectorAll('.form-control')) as HTMLInputElement[];
+
+    const filledFields = Array.from(formControls)
+      .filter((element: HTMLInputElement) => {
+        return element.value && this.fieldWeights.hasOwnProperty(element.id);
+      })
+      .reduce((sum, element) => {
+        return sum + (this.fieldWeights[element.id as keyof typeof this.fieldWeights] || 0);
+      }, 0);
+
+    this.toggleVisibility('.form-irrelevant, .form-irrelevant_orange, .form-relevant', false);
+    console.log("CALCUL SCENTIFIQUE", filledFields)
+    if (filledFields > 12) {
+      this.toggleVisibility('.form-relevant', true);
+    } else if (filledFields >= 5) {
+      this.toggleVisibility('.form-irrelevant_orange', true);
+    } else {
+      this.toggleVisibility('.form-irrelevant', true);
+    }
+
+    if (this.scoreInput && this.scoreInput.nativeElement) {
+      this.scoreInput.nativeElement.value = filledFields;
+    }
+  }
+
+  private toggleVisibility(selector: string, isVisible: boolean) {
+    const elements = document.querySelectorAll(selector);
+
+    elements.forEach((element: Element) => {
+      if (element instanceof HTMLElement) {
+        element.style.display = isVisible ? 'block' : 'none';
+      }
+    });
+  }
 }

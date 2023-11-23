@@ -6,7 +6,7 @@
     <ion-title>Nouvelle alerte</ion-title>
   </ion-toolbar>
 </ion-header>
-
+<input #scoreInput type="text" />
 <ion-content class="ion-padding">
   <ion-card>
     <ion-card-content>
@@ -21,7 +21,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="warning">
+  <ion-card class="danger form-irrelevant">
     <ion-card-content>
       <div>
         Votre formulaire contient peu d'informations et sera probablement pris en compte
@@ -29,7 +29,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="success">
+  <ion-card class="warning form-irrelevant_orange">
     <ion-card-content>
       <div>
         Votre formulaire a de grandes chances d'être pertinent
@@ -37,7 +37,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="danger">
+  <ion-card class="success form-relevant">
     <ion-card-content>
       <div>
         Votre formulaire contient très peu d'informations et ne sera probablement pris en compte
@@ -50,7 +50,7 @@
 
     <ion-item>
       <ion-label position="stacked">Région</ion-label>
-      <ion-select
+      <ion-select class="form-control" id="region"
         formControlName="region"
         name="region"
         (ionChange)="handleRegionChange($event)"
@@ -67,7 +67,7 @@
 
     <ion-item>
       <ion-label position="stacked">Province</ion-label>
-      <ion-select
+      <ion-select class="form-control" id="province"
         formControlName="province"
         name="province"
         (ionChange)="handleProvinceChange($event)"
@@ -84,7 +84,7 @@
 
     <ion-item>
       <ion-label position="stacked">Commune</ion-label>
-      <ion-select formControlName="commune" name="commune">
+      <ion-select class="form-control" (ionChange)="checkFormRelevance()"  id="commune" formControlName="commune" name="commune">
         <ion-select-option value=""></ion-select-option>
         <ion-select-option
           *ngFor="let commune of communes"
@@ -97,22 +97,22 @@
 
     <ion-item>
       <ion-label position="stacked">Secteur / quartier</ion-label>
-      <ion-input formControlName="localite" name="localite" type="text"></ion-input>
+      <ion-input class="form-control" id="localite" (ionChange)="checkFormRelevance()"  formControlName="localite" name="localite" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Surnom / nom de la struture en cause</ion-label>
-      <ion-input formControlName="structure" name="structure" type="text"></ion-input>
+      <ion-input class="form-control" (ionChange)="checkFormRelevance()"  formControlName="structure" id="structure" name="structure" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Point de repère</ion-label>
-      <ion-input formControlName="repere" name="repere" type="text"></ion-input>
+      <ion-input class="form-control" (ionChange)="checkFormRelevance()"  id="repere" formControlName="repere" name="repere" type="text"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Numéro NIP de la CNIB (17 chiffres)</ion-label>
-      <ion-input
+      <ion-input class="form-control" (ionChange)="checkFormRelevance()"  id="nip"
         inputmode="numeric"
         minlength="17"
         maxlength="17"
@@ -124,23 +124,23 @@
       <ion-icon (click)="deleteRecord()" [ngClass]="{'hidden': !isRecording && recordedData === null}" class="record-button" name="trash-outline"></ion-icon>
       <ion-icon [ngClass]="{'hidden': isRecording || recordedData !== null}" (click)="startRecording()" class="record-button" name="caret-forward-circle-outline" size="large"></ion-icon>
       <p [ngClass]="{'hidden': !isRecording}">{{displayTime()}}</p>
-      <audio *ngIf="recordedData !== null" controls [src]="getAudio()"></audio>
+      <audio *ngIf="recordedData !== null" controls [src]="getAudio()" class="form-control"  id="recordingIndicator"></audio>
       <ion-icon [ngClass]="{'hidden': !isRecording}" (click)="stopRecording()" class="record-button" name="send-outline" size="large"></ion-icon>
     </ion-item>
 
     <ion-item>
-      <ion-button (click)="takePicture()">Prendre une photo</ion-button>
+      <ion-button (click)="takePicture()" class="form-contol" id="photo">Prendre une photo</ion-button>
       <img *ngIf="imageSource !== undefined" class="image-container" alt="" src="{{imageSource}}" />
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Commentaire</ion-label>
-      <ion-textarea formControlName="message" name="message"></ion-textarea>
+      <ion-textarea class="form-control" (ionChange)="checkFormRelevance()"  id="message" formControlName="message" name="message"></ion-textarea>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Espace réservé, code si vous en avez</ion-label>
-      <ion-input formControlName="agent_code" name="agent_code" type="text"></ion-input>
+      <ion-input class="form-control" (ionChange)="checkFormRelevance()" id="espace" formControlName="agent_code" name="agent_code" type="text"></ion-input>
     </ion-item>
 
     <ion-button (click)="onSubmit()" expand="full">Envoyer</ion-button>
