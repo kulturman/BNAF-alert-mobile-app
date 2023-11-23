@@ -8,7 +8,7 @@ import {RecordingData, VoiceRecorder} from "capacitor-voice-recorder";
 import {DateUtil} from "../../shared/dateUtil";
 import {Camera, CameraResultType, CameraSource} from "@capacitor/camera";
 import {ReportService} from "../../services/report.service";
-import { Network } from '@capacitor/network';
+import {Network} from '@capacitor/network';
 import {DbService} from "../../services/db.service";
 
 @Component({
@@ -110,8 +110,7 @@ export class NewAlertPage implements OnInit {
         .finally(() => {
           this.ionLoading.dismiss();
         });
-    }
-    else {
+    } else {
       const alert = await this.alertController.create({
         header: 'Hors connexion',
         message: "Votre connexion semble interrompue. Vos données ont été enregistrées localement et seront automatiquement transmises dès que la connexion sera rétablie.",
