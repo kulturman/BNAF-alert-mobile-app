@@ -4,6 +4,7 @@ const config: CapacitorConfig = {
   appId: 'gov.mines.bf.bnaf-mobile-app',
   appName: 'bnaf-mobile-app',
   webDir: 'www',
+  bundledWebRuntime: false,
   server: {
     androidScheme: 'https'
   },
