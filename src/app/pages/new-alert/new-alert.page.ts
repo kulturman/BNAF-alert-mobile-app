@@ -19,7 +19,6 @@ import {DbService} from "../../services/db.service";
   imports: [IonicModule, FormsModule, ReactiveFormsModule, NgForOf, KeyValuePipe, NgClass, NgIf]
 })
 export class NewAlertPage implements OnInit {
-  @ViewChild('score') scoreInput?: ElementRef;
   formGroup: FormGroup;
   regions: any;
   provinces = [];
@@ -66,6 +65,7 @@ export class NewAlertPage implements OnInit {
       nip: ['', Validators.pattern('^[0-9]{17}$')],
       message: [''],
       repere: [''],
+      score: [''],
     })
   }
 
@@ -190,9 +190,9 @@ export class NewAlertPage implements OnInit {
     });
 
     this.imageSource = image.dataUrl;
-    if (this.imageSource !== undefined) {
+  /*  if (this.imageSource !== undefined) {
       this.checkFormRelevance()
-    }
+    }*/
     this.selectedImageUrl = image.webPath;
 
   };
@@ -209,18 +209,20 @@ export class NewAlertPage implements OnInit {
   }
 
   checkFormRelevance() {
-    const formControls = Array.from(document.querySelectorAll('.form-control')) as HTMLInputElement[];
+    const filledFields = Object.keys(this.fieldWeights).reduce((sum, fieldName) => {
+      const formControl = this.formGroup.get(fieldName);
+      const fieldValue = formControl?.value;
 
-    const filledFields = Array.from(formControls)
-      .filter((element: HTMLInputElement) => {
-        return element.value && this.fieldWeights.hasOwnProperty(element.id);
-      })
-      .reduce((sum, element) => {
-        return sum + (this.fieldWeights[element.id as keyof typeof this.fieldWeights] || 0);
-      }, 0);
+      if (fieldValue && this.fieldWeights.hasOwnProperty(fieldName)) {
+        sum += this.fieldWeights[fieldName as keyof typeof this.fieldWeights];
+      }
+
+      return sum;
+    }, 0);
 
     this.toggleVisibility('.form-irrelevant, .form-irrelevant_orange, .form-relevant', false);
-    console.log("CALCUL SCENTIFIQUE", filledFields)
+    console.log("CALCUL SCIENTIFIQUE", filledFields);
+
     if (filledFields > 12) {
       this.toggleVisibility('.form-relevant', true);
     } else if (filledFields >= 5) {
@@ -229,18 +231,14 @@ export class NewAlertPage implements OnInit {
       this.toggleVisibility('.form-irrelevant', true);
     }
 
-    if (this.scoreInput && this.scoreInput.nativeElement) {
-      this.scoreInput.nativeElement.value = filledFields;
-    }
+    this.formGroup.get('score')?.setValue(filledFields);
   }
 
-  private toggleVisibility(selector: string, isVisible: boolean) {
+  toggleVisibility(selector: string, isVisible: boolean) {
     const elements = document.querySelectorAll(selector);
-
-    elements.forEach((element: Element) => {
-      if (element instanceof HTMLElement) {
-        element.style.display = isVisible ? 'block' : 'none';
-      }
+    elements.forEach((element) => {
+      element.classList.toggle('hidden', !isVisible);
     });
   }
+
 }

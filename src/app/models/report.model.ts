@@ -12,4 +12,5 @@ export interface ReportModel {
   agent_code: string;
   has_audio: boolean;
   photos: string[];
+  score: number;
 }
