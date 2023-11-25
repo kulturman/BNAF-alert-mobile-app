@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'gov.mines.bf.bnaf-mobile-app',
+  appId: 'gov.memc.bnaf',
   appName: 'bnaf-mobile-app',
   webDir: 'www',
   bundledWebRuntime: false,
