@@ -10,6 +10,7 @@ import {Camera, CameraResultType, CameraSource} from "@capacitor/camera";
 import {ReportService} from "../../services/report.service";
 import {Network} from '@capacitor/network';
 import {DbService} from "../../services/db.service";
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-tab2',
@@ -71,7 +72,6 @@ export class NewAlertPage implements OnInit {
 
   async ngOnInit() {
     this.regions = this.countryDataService.regions;
-    await this.dbService.initializeSQLite();
     this.checkFormRelevance();
   }
 
@@ -118,12 +118,12 @@ export class NewAlertPage implements OnInit {
         message: "Votre connexion semble interrompue. Vos données ont été enregistrées localement et seront automatiquement transmises dès que la connexion sera rétablie.",
         buttons: ['OK'],
       });
-      console.log(this.formGroup.value);
 
       await this.dbService.saveReport({
         ...this.formGroup.value,
         audio: this.recordedData?.value?.recordDataBase64,
-        photoInput: this.imageSource || null
+        photoInput: this.imageSource || null,
+        clientDate: format(new Date(), 'yyyy-MM-dd HH:mm'),
       });
 
       //Refactor later to prevent duplication
@@ -235,7 +235,6 @@ export class NewAlertPage implements OnInit {
     }, 0);
 
     this.toggleVisibility('.form-irrelevant, .form-irrelevant_orange, .form-relevant', false);
-    console.log("CALCUL SCIENTIFIQUE", filledFields);
 
     if (filledFields > 12) {
       this.toggleVisibility('.form-relevant', true);

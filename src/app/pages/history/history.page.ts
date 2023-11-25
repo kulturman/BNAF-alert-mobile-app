@@ -5,6 +5,8 @@ import {HISTORY} from "src/app/services/mock-alert-history.service";
 import {NgFor} from "@angular/common";
 import {Router} from "@angular/router";
 import {DbService} from "../../services/db.service";
+import {ReportService} from "../../services/report.service";
+import {Network} from "@capacitor/network";
 
 
 @Component({
@@ -22,7 +24,8 @@ export class HistoryPage implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-    private dbService: DbService
+    private dbService: DbService,
+    private reportService: ReportService
   ) {
   }
 
@@ -31,19 +34,45 @@ export class HistoryPage implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
+    const status = await Network.getStatus();
+
     this.dbService.getAll().then(data => {
-      this.alerts = data.values as [];
+      let alertsList = [];
+
+      for(let alert of data.values as [{id: number, report: string}]) {
+        alertsList.push({
+          id: alert.id,
+          ...JSON.parse(alert.report as string)
+        });
+      }
+      this.alerts = alertsList;
+console.log(this.alerts,this.alerts.length);
+      if (status.connected) {
+        this.sendData();
+      }
     }).finally(async () => {
       await this.ionLoading.dismiss();
-    });
+    })
+    .catch(e => console.log(e));
   }
 
-  navigateToDetails(alert: any) {
-    this.router.navigate(['/details'], {
-      queryParams: {
-        alert: JSON.stringify(alert)
+  async sendData() {
+    await this.ionLoading.present();
+
+    for (let alert of this.alerts) {
+      let promises = [];
+
+      if (!Array.isArray(alert)) {
+        promises.push(this.reportService.newReport(alert));
       }
-    });
-  }
 
+      Promise.all(promises).then(() => {
+        this.dbService.deleteAll();
+        this.alerts = [];
+      })
+      .catch(error => console.log(error));
+    }
+
+    await this.ionLoading.dismiss();
+  }
 }

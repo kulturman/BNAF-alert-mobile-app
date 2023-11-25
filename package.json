@@ -38,6 +38,7 @@
     "@ionic/pwa-elements": "^3.2.2",
     "axios": "^1.6.0",
     "capacitor-voice-recorder": "^5.0.0",
+    "date-fns": "^2.30.0",
     "ionicons": "^7.0.0",
     "jeep-sqlite": "^2.5.4",
     "rxjs": "~7.8.0",

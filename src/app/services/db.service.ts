@@ -49,4 +49,14 @@ export class DbService {
     await this.initializeSQLite();
     return this.db.query('SELECT * FROM reports');
   }
+
+  async delete(id: number) {
+    await this.initializeSQLite();
+    return await this.db.run(`DELETE FROM reports WHERE id = ?`, [id]);
+  }
+
+  async deleteAll() {
+    await this.initializeSQLite();
+    return await this.db.run(`DELETE FROM reports`);
+  }
 }

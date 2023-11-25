@@ -145,6 +145,10 @@
       <ion-input class="form-control" (ionChange)="checkFormRelevance()" id="espace" formControlName="agent_code" name="agent_code" type="text"></ion-input>
     </ion-item>
 
-    <ion-button (click)="onSubmit()" expand="full">Envoyer</ion-button>
+    <ion-item>
+      <ion-button (click)="onSubmit()" expand="full">Envoyer</ion-button>
+      <ion-label position="stacked"></ion-label>
+      <ion-input class="form-control" (ionChange)="checkFormRelevance()" type="text"></ion-input>
+    </ion-item>
   </form>
 </ion-content>
