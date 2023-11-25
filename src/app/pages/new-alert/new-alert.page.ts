@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AlertController, IonicModule, IonLoading} from '@ionic/angular';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
@@ -8,7 +8,7 @@ import {RecordingData, VoiceRecorder} from "capacitor-voice-recorder";
 import {DateUtil} from "../../shared/dateUtil";
 import {Camera, CameraResultType, CameraSource} from "@capacitor/camera";
 import {ReportService} from "../../services/report.service";
-import { Network } from '@capacitor/network';
+import {Network} from '@capacitor/network';
 import {DbService} from "../../services/db.service";
 
 @Component({
@@ -32,6 +32,20 @@ export class NewAlertPage implements OnInit {
   ionLoading!: IonLoading;
   imageSource: any;
 
+  fieldWeights = {
+    'region': 1,
+    'province': 1,
+    'commune': 1,
+    'localite': 2,
+    'structure': 1,
+    'repere': 2,
+    'nip': 1,
+    'photo': 3,
+    'message': 3,
+    'recordingIndicator': 3,
+    'espace': 3
+  };
+
   constructor(
     public router: Router,
     private formBuilder: FormBuilder,
@@ -51,12 +65,14 @@ export class NewAlertPage implements OnInit {
       nip: ['', Validators.pattern('^[0-9]{17}$')],
       message: [''],
       repere: [''],
+      score: [''],
     })
   }
 
   async ngOnInit() {
     this.regions = this.countryDataService.regions;
     await this.dbService.initializeSQLite();
+    this.checkFormRelevance();
   }
 
   async onSubmit() {
@@ -97,8 +113,6 @@ export class NewAlertPage implements OnInit {
         });
     }
     else {
-      await this.ionLoading.present();
-
       const alert = await this.alertController.create({
         header: 'Hors connexion',
         message: "Votre connexion semble interrompue. Vos données ont été enregistrées localement et seront automatiquement transmises dès que la connexion sera rétablie.",
@@ -156,6 +170,7 @@ export class NewAlertPage implements OnInit {
 
     }
     const audioBlob = this.base64ToBlob(this.recordedData?.value?.recordDataBase64, 'audio/wav');
+    this.checkFormRelevance()
     return URL.createObjectURL(audioBlob);
   }
 
@@ -189,17 +204,55 @@ export class NewAlertPage implements OnInit {
     });
 
     this.imageSource = image.dataUrl;
-
+  /*  if (this.imageSource !== undefined) {
+      this.checkFormRelevance()
+    }*/
     this.selectedImageUrl = image.webPath;
+
   };
 
   handleRegionChange(e: any) {
     this.provinces = this.countryDataService.getProvincesByRegion(e.detail.value as string);
     this.handleProvinceChange(e);
+    this.checkFormRelevance();
   }
 
   handleProvinceChange(e: any) {
     this.communes = this.countryDataService.getCommunesByProvince(e.detail.value as string);
+    this.checkFormRelevance();
+  }
+
+  checkFormRelevance() {
+    const filledFields = Object.keys(this.fieldWeights).reduce((sum, fieldName) => {
+      const formControl = this.formGroup.get(fieldName);
+      const fieldValue = formControl?.value;
+
+      if (fieldValue && this.fieldWeights.hasOwnProperty(fieldName)) {
+        sum += this.fieldWeights[fieldName as keyof typeof this.fieldWeights];
+      }
+
+      return sum;
+    }, 0);
+
+    this.toggleVisibility('.form-irrelevant, .form-irrelevant_orange, .form-relevant', false);
+    console.log("CALCUL SCIENTIFIQUE", filledFields);
+
+    if (filledFields > 12) {
+      this.toggleVisibility('.form-relevant', true);
+    } else if (filledFields >= 5) {
+      this.toggleVisibility('.form-irrelevant_orange', true);
+    } else {
+      this.toggleVisibility('.form-irrelevant', true);
+    }
+
+    this.formGroup.get('score')?.setValue(filledFields);
+  }
+
+  toggleVisibility(selector: string, isVisible: boolean) {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach((element) => {
+      element.classList.toggle('hidden', !isVisible);
+    });
   }
 
 }
