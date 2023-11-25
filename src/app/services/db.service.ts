@@ -5,21 +5,48 @@ import {Injectable} from "@angular/core";
   providedIn: 'root'
 })
 export class DbService {
-  async initializeSQLite() {
-    const sqlite = new SQLiteConnection(CapacitorSQLite);
-    try {
-      const db: SQLiteDBConnection = await sqlite.createConnection('my-database', false, 'no-encryption', 1, false);
-      await db.open();
+  private sqlite: SQLiteConnection;
+  private db!: SQLiteDBConnection;
 
-      // Create a new table if it doesn't exist
-      await db.execute(`CREATE TABLE IF NOT EXISTS my_table (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL
-        );`);
+  constructor() {
+    this.sqlite = new SQLiteConnection(CapacitorSQLite);
+  }
+
+  private DB_NAME = 'alerts';
+
+  async initializeSQLite() {
+    try {
+        if (this.db !== undefined) {
+          return;
+        }
+
+        if (await this.sqlite.checkConnectionsConsistency()) {
+          this.db = await this.sqlite.createConnection(this.DB_NAME, false, 'no-encryption', 1, false);
+        }
+        else {
+          this.db = await this.sqlite.retrieveConnection(this.DB_NAME, false);
+        }
+
+        await this.db.open();
+
+        await this.db.execute(`CREATE TABLE IF NOT EXISTS reports (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              report TEXT NOT NULL
+          );`);
 
       // Database is ready to use
     } catch (e) {
-      console.error('Error initializing SQLite database', e);
+      console.error('Error initializing SQLite database', e)
     }
+  }
+
+  async saveReport(report: any) {
+    await this.initializeSQLite();
+    await this.db.run(`INSERT INTO reports(report) VALUES(?)`, [JSON.stringify(report)], false);
+  }
+
+  async getAll() {
+    await this.initializeSQLite();
+    return this.db.query('SELECT * FROM reports');
   }
 }

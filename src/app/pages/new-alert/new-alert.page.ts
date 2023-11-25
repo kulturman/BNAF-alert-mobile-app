@@ -56,6 +56,7 @@ export class NewAlertPage implements OnInit {
 
   async ngOnInit() {
     this.regions = this.countryDataService.regions;
+    await this.dbService.initializeSQLite();
   }
 
   async onSubmit() {
@@ -96,12 +97,26 @@ export class NewAlertPage implements OnInit {
         });
     }
     else {
+      await this.ionLoading.present();
+
       const alert = await this.alertController.create({
         header: 'Hors connexion',
         message: "Votre connexion semble interrompue. Vos données ont été enregistrées localement et seront automatiquement transmises dès que la connexion sera rétablie.",
         buttons: ['OK'],
       });
       console.log(this.formGroup.value);
+
+      await this.dbService.saveReport({
+        ...this.formGroup.value,
+        audio: this.recordedData?.value?.recordDataBase64,
+        photoInput: this.imageSource || null
+      });
+
+      //Refactor later to prevent duplication
+      await this.ionLoading.dismiss();
+      this.formGroup.reset();
+      this.imageSource = undefined;
+      this.recordedData = null;
       await alert.present();
     }
   }

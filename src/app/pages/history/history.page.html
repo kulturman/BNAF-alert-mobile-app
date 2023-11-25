@@ -7,7 +7,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content color="light">
+<ion-loading #ionLoading message="Veuillez patienter"></ion-loading>
+
+<ion-content color="light" *ngIf="alerts.length > 0;">
   <ion-list [inset]="true">
     <ion-item *ngFor="let alert of alerts" (click)="navigateToDetails(alert)" ion-ripple-effect>
       <ion-label>
