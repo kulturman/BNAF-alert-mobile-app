@@ -78,6 +78,19 @@ export class NewAlertPage implements OnInit {
   async onSubmit() {
     const status = await Network.getStatus();
 
+    const fieldsToCheck = ['region', 'province', 'localite', 'commune', 'structure', 'agent_code', 'nip', 'message', 'repere'];
+
+    if (fieldsToCheck.every(field => !this.formGroup.get(field)?.value)) {
+      const alert = await this.alertController.create({
+        cssClass: 'error-alert',
+        message: 'Veuillez remplir au moins un champ avant de soumettre le formulaire!',
+        buttons: ['OK']
+      });
+
+      await alert.present();
+      return;
+    }
+
     if (this.formGroup.controls['nip'].errors !== null) {
       const alert = await this.alertController.create({
         cssClass: 'error-alert',
@@ -134,6 +147,59 @@ export class NewAlertPage implements OnInit {
       await alert.present();
     }
   }
+
+  async handleConnectedSubmit() {
+    try {
+      await this.ionLoading.present();
+
+      const reportData = {
+        ...this.formGroup.value,
+        audio: this.recordedData?.value?.recordDataBase64,
+        photoInput: this.imageSource || null
+      };
+
+      const { data } = await this.reportService.newReport(reportData);
+
+      await this.showAlert('Information', data.message);
+    } catch (error) {
+      console.error('Erreur lors de la soumission du rapport:', error);
+    } finally {
+      await this.ionLoading.dismiss();
+      this.resetForm();
+    }
+  }
+
+  async handleOfflineSubmit() {
+    await this.dbService.saveReport({
+      ...this.formGroup.value,
+      audio: this.recordedData?.value?.recordDataBase64,
+      photoInput: this.imageSource || null,
+      clientDate: format(new Date(), 'yyyy-MM-dd HH:mm'),
+    });
+
+    await this.showAlert('Hors connexion', 'Votre connexion semble interrompue. Vos données ont été enregistrées localement et seront automatiquement transmises dès que la connexion sera rétablie.');
+
+    await this.ionLoading.dismiss();
+    this.resetForm();
+  }
+
+  async showAlert(header: string, message: string): Promise<void> {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ['OK'],
+      cssClass: 'error-alert',
+    });
+
+    await alert.present();
+  }
+
+  resetForm() {
+    this.formGroup.reset();
+    this.imageSource = undefined;
+    this.recordedData = null;
+  }
+
 
   async startRecording() {
     await VoiceRecorder.requestAudioRecordingPermission();
@@ -223,19 +289,18 @@ export class NewAlertPage implements OnInit {
   }
 
   checkFormRelevance() {
-    const filledFields = Object.keys(this.fieldWeights).reduce((sum, fieldName) => {
-      const formControl = this.formGroup.get(fieldName);
-      const fieldValue = formControl?.value;
+    const formControls = Array.from(document.querySelectorAll('.form-control')) as HTMLInputElement[];
 
-      if (fieldValue && this.fieldWeights.hasOwnProperty(fieldName)) {
-        sum += this.fieldWeights[fieldName as keyof typeof this.fieldWeights];
-      }
-
-      return sum;
-    }, 0);
+    const filledFields = Array.from(formControls)
+      .filter((element: HTMLInputElement) => {
+        return element.value && this.fieldWeights.hasOwnProperty(element.id);
+      })
+      .reduce((sum, element) => {
+        return sum + (this.fieldWeights[element.id as keyof typeof this.fieldWeights] || 0);
+      }, 0);
 
     this.toggleVisibility('.form-irrelevant, .form-irrelevant_orange, .form-relevant', false);
-
+   /* console.log("CALCUL SCENTIFIQUE", filledFields)*/
     if (filledFields > 12) {
       this.toggleVisibility('.form-relevant', true);
     } else if (filledFields >= 5) {

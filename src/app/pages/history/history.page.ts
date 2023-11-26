@@ -34,6 +34,9 @@ export class HistoryPage implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
+    await this.offLine();
+  }
+  async offLine() {
     const status = await Network.getStatus();
 
     this.dbService.getAll().then(data => {
@@ -46,14 +49,14 @@ export class HistoryPage implements OnInit, AfterViewInit {
         });
       }
       this.alerts = alertsList;
-console.log(this.alerts,this.alerts.length);
+      console.log(this.alerts,this.alerts.length);
       if (status.connected) {
         this.sendData();
       }
     }).finally(async () => {
       await this.ionLoading.dismiss();
     })
-    .catch(e => console.log(e));
+      .catch(e => console.log(e));
   }
 
   async sendData() {
@@ -70,7 +73,7 @@ console.log(this.alerts,this.alerts.length);
         this.dbService.deleteAll();
         this.alerts = [];
       })
-      .catch(error => console.log(error));
+        .catch(error => console.log(error));
     }
 
     await this.ionLoading.dismiss();
