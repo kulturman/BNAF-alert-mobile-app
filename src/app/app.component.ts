@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
       icon: 'send'
     },
     {
-      title: "Alertes en attende d'envoi",
+      title: "Alertes en attente d'envoi",
       url: '/history',
       icon: 'folder'
     }

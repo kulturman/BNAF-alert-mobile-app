@@ -50,9 +50,9 @@ export class HistoryPage implements OnInit, AfterViewInit {
       }
       this.alerts = alertsList;
       console.log(this.alerts,this.alerts.length);
-      if (status.connected) {
+     /* if (status.connected) {
         this.sendData();
-      }
+      }*/
     }).finally(async () => {
       await this.ionLoading.dismiss();
     })
